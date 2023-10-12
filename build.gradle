@@ -1,0 +1,77 @@
+plugins {
+    id "java"
+    id "jacoco"
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+sourceSets {
+    testArchitecture {
+        compileClasspath += sourceSets.test.output + sourceSets.main.output
+        runtimeClasspath += sourceSets.test.output + sourceSets.main.output
+    }
+    testIntegration {
+        compileClasspath += sourceSets.test.output + sourceSets.main.output
+        runtimeClasspath += sourceSets.test.output + sourceSets.main.output
+    }
+}
+
+configurations {
+    testArchitectureImplementation.extendsFrom testImplementation
+    testArchitectureRuntime.extendsFrom testRuntime
+    testArchitectureRuntimeOnly.extendsFrom testRuntimeOnly
+    testIntegrationImplementation.extendsFrom testImplementation
+    testIntegrationRuntime.extendsFrom testRuntime
+    testIntegrationRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+dependencies {
+    implementation("org.slf4j:slf4j-simple:2.0.9")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.7.16")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.16")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.0")
+
+    testArchitectureImplementation("com.tngtech.archunit:archunit-junit5-engine:1.1.0")
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+    }
+}
+
+tasks.register("testArchitecture", Test) {
+    description = "Runs architecture tests."
+    group = "verification"
+    classpath = sourceSets.testArchitecture.runtimeClasspath
+    testClassesDirs = sourceSets.testArchitecture.output.classesDirs
+    shouldRunAfter test
+}
+
+check.dependsOn testArchitecture
+
+tasks.register("testIntegration", Test) {
+    description = "Runs integration tests."
+    group = "verification"
+    classpath = sourceSets.testIntegration.runtimeClasspath
+    testClassesDirs = sourceSets.testIntegration.output.classesDirs
+    shouldRunAfter test
+}
+
+check.dependsOn testIntegration
+
