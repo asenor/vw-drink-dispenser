@@ -10,6 +10,7 @@ import java.util.Collection;
 public class Dispenser {
 
     private final ArrayList<Product> products;
+    private Status status = Status.AVAILABLE;
 
     public Dispenser(Collection<Product> initialProducts) {
         this.products = new ArrayList<>(initialProducts);
@@ -21,5 +22,14 @@ public class Dispenser {
 
     public <P extends Product> long productStock(Class<P> productType) {
         return products.stream().filter(product -> product.getClass() == productType).count();
+    }
+
+    public Status status() {
+        return status;
+    }
+
+    public enum Status {
+        AVAILABLE,
+        OUT_OF_ORDER;
     }
 }
