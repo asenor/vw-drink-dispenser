@@ -14,6 +14,6 @@ public class Stock {
     }
 
     public <P extends Product> long byProduct(Class<P> productType) {
-        return dispenser.getProductStock(productType);
+        return dispenser.productStock(productType);
     }
 }

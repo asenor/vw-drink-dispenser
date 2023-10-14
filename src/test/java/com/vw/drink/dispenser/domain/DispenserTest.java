@@ -17,7 +17,7 @@ public class DispenserTest {
         dispenser.addProduct(new Coke(new Timestamp(0)));
         dispenser.addProduct(new Coke(new Timestamp(0)));
 
-        assertEquals(2, dispenser.getProductStock(Coke.class));
+        assertEquals(2, dispenser.productStock(Coke.class));
     }
 
     @Test
@@ -30,7 +30,7 @@ public class DispenserTest {
             new Water(new Timestamp(60))
         ));
 
-        assertEquals(3, dispenser.getProductStock(Coke.class));
-        assertEquals(2, dispenser.getProductStock(Water.class));
+        assertEquals(3, dispenser.productStock(Coke.class));
+        assertEquals(2, dispenser.productStock(Water.class));
     }
 }

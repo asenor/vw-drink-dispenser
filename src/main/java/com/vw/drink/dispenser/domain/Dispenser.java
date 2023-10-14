@@ -19,7 +19,7 @@ public class Dispenser {
         products.add(product);
     }
 
-    public <P extends Product> long getProductStock(Class<P> productType) {
+    public <P extends Product> long productStock(Class<P> productType) {
         return products.stream().filter(product -> product.getClass() == productType).count();
     }
 }
