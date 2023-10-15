@@ -1,5 +1,6 @@
 package com.vw.drink.dispenser.domain;
 
+import com.vw.drink.dispenser.domain.exception.InvalidProduct;
 import com.vw.drink.dispenser.infrastructure.InMemoryProductRepository;
 import org.junit.jupiter.api.Test;
 

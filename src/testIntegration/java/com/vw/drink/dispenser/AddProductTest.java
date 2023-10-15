@@ -1,10 +1,10 @@
 package com.vw.drink.dispenser;
 
 import com.vw.drink.dispenser.application.AddProduct;
-import com.vw.drink.dispenser.domain.InvalidProduct;
 import com.vw.drink.dispenser.domain.Product;
 import com.vw.drink.dispenser.domain.ProductType;
 import com.vw.drink.dispenser.domain.Timestamp;
+import com.vw.drink.dispenser.domain.exception.InvalidProduct;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
