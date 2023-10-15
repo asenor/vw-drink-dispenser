@@ -17,12 +17,12 @@ public class StockTest extends BaseIntegrationTest {
 
     @Test
     public void testAddProduct() throws InvalidProduct {
-        dispenser.addProduct(Product.Factory.create(ProductType.COKE, new Timestamp(0)));
-        dispenser.addProduct(Product.Factory.create(ProductType.WATER, new Timestamp(0)));
-        dispenser.addProduct(Product.Factory.create(ProductType.WATER, new Timestamp(0)));
+        productRepository.add(Product.Factory.create(ProductType.COKE, new Timestamp(0)));
+        productRepository.add(Product.Factory.create(ProductType.WATER, new Timestamp(0)));
+        productRepository.add(Product.Factory.create(ProductType.WATER, new Timestamp(0)));
 
-        assertEquals(0, stock.byProduct(null));
-        assertEquals(1, stock.byProduct(ProductType.COKE));
-        assertEquals(2, stock.byProduct(ProductType.WATER));
+        assertEquals(0, stock.byProductType(null));
+        assertEquals(1, stock.byProductType(ProductType.COKE));
+        assertEquals(2, stock.byProductType(ProductType.WATER));
     }
 }

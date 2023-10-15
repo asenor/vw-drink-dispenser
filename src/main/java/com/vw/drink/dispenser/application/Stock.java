@@ -1,19 +1,19 @@
 package com.vw.drink.dispenser.application;
 
-import com.vw.drink.dispenser.domain.Dispenser;
+import com.vw.drink.dispenser.domain.ProductRepository;
 import com.vw.drink.dispenser.domain.ProductType;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Stock {
 
-    private final Dispenser dispenser;
+    private final ProductRepository productRepository;
 
-    public Stock(Dispenser dispenser) {
-        this.dispenser = dispenser;
+    public Stock(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public long byProductType(ProductType productType) {
-        return dispenser.productStock(productType);
+        return productRepository.stock(productType);
     }
 }

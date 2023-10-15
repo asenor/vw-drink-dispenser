@@ -2,7 +2,6 @@ package com.vw.drink.dispenser;
 
 import com.vw.drink.dispenser.application.Status;
 import com.vw.drink.dispenser.domain.Dispenser;
-import com.vw.drink.dispenser.domain.InvalidProduct;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +13,7 @@ public class StatusTest extends BaseIntegrationTest {
     private Status status;
 
     @Test
-    public void testDispenserStatus() throws InvalidProduct {
+    public void testDispenserStatus() {
         assertEquals(Dispenser.Status.AVAILABLE, status.status());
     }
 }

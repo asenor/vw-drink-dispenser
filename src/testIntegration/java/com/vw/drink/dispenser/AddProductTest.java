@@ -20,7 +20,7 @@ public class AddProductTest extends BaseIntegrationTest {
     public void testAddProduct() throws InvalidProduct {
         addProduct.addProduct(Product.Factory.create(ProductType.COKE, new Timestamp(0)));
 
-        assertEquals(1, dispenser.productStock(ProductType.COKE));
+        assertEquals(1, productRepository.stock(ProductType.COKE));
 
         assertThrows(InvalidProduct.class, () -> {
             addProduct.addProduct(null);

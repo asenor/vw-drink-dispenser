@@ -1,6 +1,7 @@
 package com.vw.drink.dispenser;
 
-import com.vw.drink.dispenser.domain.Dispenser;
+import com.vw.drink.dispenser.domain.ProductRepository;
+import com.vw.drink.dispenser.infrastructure.InMemoryProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -14,13 +15,13 @@ import java.util.List;
 abstract class BaseIntegrationTest {
 
     @Autowired
-    protected Dispenser dispenser;
+    protected ProductRepository productRepository;
 
     @TestConfiguration
-    static class DispenserConfig {
+    static class ProductRepositoryConfig {
         @Bean
-        public Dispenser dispenser() {
-            return new Dispenser(List.of());
+        public ProductRepository productRepository() {
+            return new InMemoryProductRepository(List.of());
         }
     }
 }
