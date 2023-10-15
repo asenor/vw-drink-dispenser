@@ -1,5 +1,6 @@
 package com.vw.drink.dispenser.domain;
 
+import com.vw.drink.dispenser.domain.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.product.Coke;
 import com.vw.drink.dispenser.domain.product.Water;
 import org.junit.jupiter.api.Test;
@@ -7,17 +8,22 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DispenserTest {
 
     @Test
-    public void testAddProducts() {
+    public void testAddProducts() throws InvalidProduct {
         var dispenser = new Dispenser(List.of());
 
         dispenser.addProduct(new Coke(new Timestamp(0)));
         dispenser.addProduct(new Coke(new Timestamp(0)));
 
         assertEquals(2, dispenser.productStock(Coke.class));
+
+        assertThrows(InvalidProduct.class, () -> {
+           dispenser.addProduct(null);
+        });
     }
 
     @Test

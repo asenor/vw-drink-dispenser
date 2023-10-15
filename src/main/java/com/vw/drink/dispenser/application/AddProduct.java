@@ -1,7 +1,7 @@
 package com.vw.drink.dispenser.application;
 
-import com.vw.drink.dispenser.application.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.Dispenser;
+import com.vw.drink.dispenser.domain.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.product.Product;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +14,7 @@ public class AddProduct {
         this.dispenser = dispenser;
     }
 
-    public boolean addProduct(Product product) throws InvalidProduct {
-        if (product == null) {
-            throw new InvalidProduct(product);
-        }
-
+    public void addProduct(Product product) throws InvalidProduct {
         dispenser.addProduct(product);
-
-        return true;
     }
 }

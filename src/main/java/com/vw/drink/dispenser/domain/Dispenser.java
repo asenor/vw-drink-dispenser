@@ -1,5 +1,6 @@
 package com.vw.drink.dispenser.domain;
 
+import com.vw.drink.dispenser.domain.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.product.Product;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,10 @@ public class Dispenser {
         this.products = new ArrayList<>(initialProducts);
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product) throws InvalidProduct {
+        if (product == null)
+            throw new InvalidProduct();
+
         products.add(product);
     }
 

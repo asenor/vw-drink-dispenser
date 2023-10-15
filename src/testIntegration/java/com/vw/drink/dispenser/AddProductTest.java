@@ -1,15 +1,14 @@
 package com.vw.drink.dispenser;
 
 import com.vw.drink.dispenser.application.AddProduct;
-import com.vw.drink.dispenser.application.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.Timestamp;
+import com.vw.drink.dispenser.domain.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.product.Coke;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AddProductTest extends BaseIntegrationTest {
 
@@ -18,13 +17,10 @@ public class AddProductTest extends BaseIntegrationTest {
 
     @Test
     public void testAddProduct() throws InvalidProduct {
-        assertTrue(addProduct.addProduct(new Coke(new Timestamp(0))));
+        addProduct.addProduct(new Coke(new Timestamp(0)));
 
         assertEquals(1, dispenser.productStock(Coke.class));
-    }
 
-    @Test
-    public void testThrowsInvalidProductOnNull() {
         assertThrows(InvalidProduct.class, () -> {
             addProduct.addProduct(null);
         });

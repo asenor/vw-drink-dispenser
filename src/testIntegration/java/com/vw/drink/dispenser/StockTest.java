@@ -1,8 +1,8 @@
 package com.vw.drink.dispenser;
 
 import com.vw.drink.dispenser.application.Stock;
-import com.vw.drink.dispenser.application.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.Timestamp;
+import com.vw.drink.dispenser.domain.exception.InvalidProduct;
 import com.vw.drink.dispenser.domain.product.Coke;
 import com.vw.drink.dispenser.domain.product.Water;
 import org.junit.jupiter.api.Test;
