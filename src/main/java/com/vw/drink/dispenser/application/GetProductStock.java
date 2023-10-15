@@ -5,15 +5,15 @@ import com.vw.drink.dispenser.domain.ProductType;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Stock {
+public class GetProductStock {
 
     private final ProductRepository productRepository;
 
-    public Stock(ProductRepository productRepository) {
+    public GetProductStock(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    public long byProductType(ProductType productType) {
-        return productRepository.stock(productType);
+    public long byType(ProductType type) {
+        return productRepository.stock(type);
     }
 }

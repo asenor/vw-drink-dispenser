@@ -14,7 +14,7 @@ public class AddProduct {
         this.productRepository = productRepository;
     }
 
-    public void addProduct(Product product) throws InvalidProduct {
+    public void handle(Product product) throws InvalidProduct {
         productRepository.add(product);
     }
 }

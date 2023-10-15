@@ -18,12 +18,12 @@ public class AddProductTest extends BaseIntegrationTest {
 
     @Test
     public void testAddProduct() throws InvalidProduct {
-        addProduct.addProduct(Product.Factory.create(ProductType.COKE, new Timestamp(0)));
+        addProduct.handle(Product.Factory.create(ProductType.COKE, new Timestamp(0)));
 
         assertEquals(1, productRepository.stock(ProductType.COKE));
 
         assertThrows(InvalidProduct.class, () -> {
-            addProduct.addProduct(null);
+            addProduct.handle(null);
         });
     }
 }

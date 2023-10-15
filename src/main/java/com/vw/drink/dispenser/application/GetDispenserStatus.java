@@ -4,15 +4,15 @@ import com.vw.drink.dispenser.domain.Dispenser;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Status {
+public class GetDispenserStatus {
 
     private final Dispenser dispenser;
 
-    public Status(Dispenser dispenser) {
+    public GetDispenserStatus(Dispenser dispenser) {
         this.dispenser = dispenser;
     }
 
-    public Dispenser.Status status() {
+    public Dispenser.Status handle() {
         return dispenser.status();
     }
 }
