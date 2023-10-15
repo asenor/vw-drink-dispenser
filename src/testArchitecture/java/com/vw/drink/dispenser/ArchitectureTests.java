@@ -6,7 +6,7 @@ import com.tngtech.archunit.lang.ArchRule;
 
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
-@AnalyzeClasses(packages = {"com.vk.drink.dispenser"})
+@AnalyzeClasses(packages = {"com.vw.drink.dispenser"})
 public class ArchitectureTests {
 
     @ArchTest

@@ -1,7 +1,5 @@
 package com.vw.drink.dispenser.domain;
 
-import com.vw.drink.dispenser.domain.exception.InvalidProduct;
-import com.vw.drink.dispenser.domain.product.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,8 +22,8 @@ public class Dispenser {
         products.add(product);
     }
 
-    public <P extends Product> long productStock(Class<P> productType) {
-        return products.stream().filter(product -> product.getClass() == productType).count();
+    public long productStock(ProductType productType) {
+        return products.stream().filter(product -> product.type() == productType).count();
     }
 
     public Status status() {

@@ -1,7 +1,7 @@
 package com.vw.drink.dispenser.application;
 
 import com.vw.drink.dispenser.domain.Dispenser;
-import com.vw.drink.dispenser.domain.product.Product;
+import com.vw.drink.dispenser.domain.ProductType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +13,7 @@ public class Stock {
         this.dispenser = dispenser;
     }
 
-    public <P extends Product> long byProduct(Class<P> productType) {
+    public long byProductType(ProductType productType) {
         return dispenser.productStock(productType);
     }
 }
