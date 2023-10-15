@@ -17,8 +17,8 @@ java {
 
 sourceSets {
     testArchitecture {
-        compileClasspath += sourceSets.test.output + sourceSets.main.output
-        runtimeClasspath += sourceSets.test.output + sourceSets.main.output
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
     }
     testIntegration {
         compileClasspath += sourceSets.test.output + sourceSets.main.output
