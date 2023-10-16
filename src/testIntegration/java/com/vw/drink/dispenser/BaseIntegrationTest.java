@@ -3,6 +3,7 @@ package com.vw.drink.dispenser;
 import com.vw.drink.dispenser.configuration.DispenserConfiguration;
 import com.vw.drink.dispenser.configuration.ProductRepositoryConfiguration;
 import com.vw.drink.dispenser.configuration.TimeConfiguration;
+import com.vw.drink.dispenser.domain.Dispenser;
 import com.vw.drink.dispenser.domain.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,9 @@ import org.springframework.test.annotation.DirtiesContext;
 })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 abstract class BaseIntegrationTest {
+    @Autowired
+    protected Dispenser dispenser;
+
     @Autowired
     protected ProductRepository productRepository;
 }

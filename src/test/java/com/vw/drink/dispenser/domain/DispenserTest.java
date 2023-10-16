@@ -99,9 +99,9 @@ public class DispenserTest {
 
         var result = dispenser.dispense();
 
-        assertFalse(result.success);
         assertEquals(new Money("1.00"), result.amountReturned);
         assertNull(result.dispensedProduct);
+        assertTrue(result.error);
         assertInstanceOf(ProductWithoutStockException.class, result.errorCause);
     }
 
@@ -114,9 +114,9 @@ public class DispenserTest {
 
         var result = dispenser.dispense();
 
-        assertFalse(result.success);
         assertEquals(new Money("0.00"), result.amountReturned);
         assertNull(result.dispensedProduct);
+        assertTrue(result.error);
         assertInstanceOf(ProductExpiratedException.class, result.errorCause);
     }
 
@@ -130,9 +130,9 @@ public class DispenserTest {
 
         var result = dispenser.dispense();
 
-        assertFalse(result.success);
         assertEquals(new Money("2.00"), result.amountReturned);
         assertNull(result.dispensedProduct);
+        assertTrue(result.error);
         assertInstanceOf(AmountIntroducedIsNotEnoughException.class, result.errorCause);
     }
 
@@ -147,9 +147,9 @@ public class DispenserTest {
 
         var result = dispenser.dispense();
 
-        assertFalse(result.success);
         assertEquals(new Money("4.00"), result.amountReturned);
         assertNull(result.dispensedProduct);
+        assertTrue(result.error);
         assertInstanceOf(NotEnoughCashToGiveChangeException.class, result.errorCause);
     }
 
@@ -169,9 +169,9 @@ public class DispenserTest {
 
         var result = dispenser.dispense();
 
-        assertTrue(result.success);
         assertEquals(new Money("0.10"), result.amountReturned);
         assertSame(dispensedProduct, result.dispensedProduct);
+        assertFalse(result.error);
         assertNull(result.errorCause);
     }
 }

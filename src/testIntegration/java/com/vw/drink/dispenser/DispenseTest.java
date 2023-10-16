@@ -4,6 +4,7 @@ import com.vw.drink.dispenser.application.Dispense;
 import com.vw.drink.dispenser.application.InsertCoin;
 import com.vw.drink.dispenser.application.SelectProduct;
 import com.vw.drink.dispenser.domain.Coin;
+import com.vw.drink.dispenser.domain.Dispenser;
 import com.vw.drink.dispenser.domain.Product;
 import com.vw.drink.dispenser.domain.ProductType;
 import com.vw.drink.dispenser.domain.Timestamp;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.vw.drink.dispenser.configuration.TimeConfiguration.NOW_SECONDS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DispenseTest extends BaseIntegrationTest {
@@ -39,5 +41,6 @@ public class DispenseTest extends BaseIntegrationTest {
         dispense.handle();
 
         assertFalse(productRepository.hasStock(ProductType.WATER));
+        assertEquals(Dispenser.Status.AVAILABLE, dispenser.status());
     }
 }

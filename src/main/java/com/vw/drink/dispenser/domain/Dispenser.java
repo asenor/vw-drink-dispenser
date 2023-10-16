@@ -58,6 +58,14 @@ public class Dispenser {
         return DispenseResult.ok(amountToReturn, dispensedProduct);
     }
 
+    public DispenseResult reject() throws ProductNotSelectedException, NoUnexpiredProductException {
+        if (status != Status.PRODUCT_SELECTED) throw new ProductNotSelectedException();
+
+        var amountToReturn = amountIntroduced;
+        initialState();
+        return DispenseResult.ok(amountToReturn);
+    }
+
     private void checkProductAvailability() throws ProductWithoutStockException, ProductExpiratedException {
         status = Status.CHECK_PRODUCT_AVAILABILITY;
 
