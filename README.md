@@ -9,16 +9,16 @@
     brew install just
     ```
 
-## How to run tests
+## How to run all tests
 
 Using just:
 ``` bash
 just test
 ```
 
-Using gradle directly:
+Using gradle build:
 ``` bash
-./gradlew test
+./gradlew build
 ```
 
 
