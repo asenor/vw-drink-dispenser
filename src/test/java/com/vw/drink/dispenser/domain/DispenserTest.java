@@ -1,9 +1,9 @@
 package com.vw.drink.dispenser.domain;
 
 import com.vw.drink.dispenser.domain.dispenser.Dispenser;
+import com.vw.drink.dispenser.domain.dispenser.DispenserStatusChangeEvent;
 import com.vw.drink.dispenser.domain.dispenser.exception.AmountIntroducedIsNotEnoughException;
 import com.vw.drink.dispenser.domain.dispenser.exception.DispenserNotAvailableException;
-import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
 import com.vw.drink.dispenser.domain.dispenser.exception.NotEnoughCashToGiveChangeException;
 import com.vw.drink.dispenser.domain.dispenser.exception.ProductExpiratedException;
 import com.vw.drink.dispenser.domain.dispenser.exception.ProductNotSelectedException;
@@ -13,13 +13,17 @@ import com.vw.drink.dispenser.domain.money.Money;
 import com.vw.drink.dispenser.domain.product.Product;
 import com.vw.drink.dispenser.domain.product.ProductRepository;
 import com.vw.drink.dispenser.domain.product.ProductType;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
 import com.vw.drink.dispenser.domain.time.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -28,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,12 +42,14 @@ public class DispenserTest {
     @Mock
     private ProductRepository productRepository;
 
-    @InjectMocks
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     private Dispenser dispenser;
 
     @BeforeEach
     public void beforeEach() {
-        dispenser = new Dispenser(productRepository, new Money("1.00"));
+        dispenser = new Dispenser(productRepository, eventPublisher, new Money("1.00"));
     }
 
     @Test
@@ -162,6 +170,8 @@ public class DispenserTest {
 
     @Test
     public void dispense() throws DispenserNotAvailableException, ProductNotSelectedException, NoUnexpiredProductException {
+        var eventCaptor = ArgumentCaptor.forClass(DispenserStatusChangeEvent.class);
+
         dispenser.selectProduct(ProductType.WATER);
         dispenser.insertCoin(Coin.CENTS_20);
         dispenser.insertCoin(Coin.CENTS_20);
@@ -174,11 +184,22 @@ public class DispenserTest {
         when(productRepository.pickUnexpiredProduct(ProductType.WATER))
             .thenReturn(dispensedProduct);
 
+
         var result = dispenser.dispense();
 
         assertEquals(new Money("0.10"), result.amountReturned);
         assertSame(dispensedProduct, result.dispensedProduct);
         assertFalse(result.error);
         assertNull(result.errorCause);
+
+        verify(eventPublisher, times(6)).publishEvent(eventCaptor.capture());
+
+        List<DispenserStatusChangeEvent> capturedEvents = eventCaptor.getAllValues();
+        assertEquals(Dispenser.Status.AVAILABLE, capturedEvents.get(0).currentStatus);
+        assertEquals(Dispenser.Status.PRODUCT_SELECTED, capturedEvents.get(1).currentStatus);
+        assertEquals(Dispenser.Status.CHECK_PRODUCT_AVAILABILITY, capturedEvents.get(2).currentStatus);
+        assertEquals(Dispenser.Status.VALIDATE_MONEY, capturedEvents.get(3).currentStatus);
+        assertEquals(Dispenser.Status.DISPENSE_PRODUCT, capturedEvents.get(4).currentStatus);
+        assertEquals(Dispenser.Status.AVAILABLE, capturedEvents.get(5).currentStatus);
     }
 }

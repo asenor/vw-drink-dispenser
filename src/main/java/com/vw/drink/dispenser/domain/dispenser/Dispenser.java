@@ -1,32 +1,39 @@
 package com.vw.drink.dispenser.domain.dispenser;
 
-import com.vw.drink.dispenser.domain.money.Coin;
-import com.vw.drink.dispenser.domain.money.Money;
 import com.vw.drink.dispenser.domain.dispenser.exception.AmountIntroducedIsNotEnoughException;
 import com.vw.drink.dispenser.domain.dispenser.exception.DispenseValidationException;
 import com.vw.drink.dispenser.domain.dispenser.exception.DispenserNotAvailableException;
-import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
 import com.vw.drink.dispenser.domain.dispenser.exception.NotEnoughCashToGiveChangeException;
 import com.vw.drink.dispenser.domain.dispenser.exception.ProductExpiratedException;
 import com.vw.drink.dispenser.domain.dispenser.exception.ProductNotSelectedException;
 import com.vw.drink.dispenser.domain.dispenser.exception.ProductWithoutStockException;
+import com.vw.drink.dispenser.domain.money.Coin;
+import com.vw.drink.dispenser.domain.money.Money;
 import com.vw.drink.dispenser.domain.product.ProductPrice;
 import com.vw.drink.dispenser.domain.product.ProductRepository;
 import com.vw.drink.dispenser.domain.product.ProductType;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Dispenser {
 
     private final ProductRepository productRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     private Status status;
     private Money cash;
     private ProductType selectedProductType;
     private Money amountIntroduced;
 
-    public Dispenser(ProductRepository productRepository, Money cash) {
+    public Dispenser(
+        ProductRepository productRepository,
+        ApplicationEventPublisher eventPublisher,
+        Money cash
+    ) {
         this.productRepository = productRepository;
+        this.eventPublisher = eventPublisher;
         this.cash = cash;
         initialState();
     }
@@ -34,7 +41,7 @@ public class Dispenser {
     public void selectProduct(ProductType productType) throws DispenserNotAvailableException {
         if (status != Status.AVAILABLE) throw new DispenserNotAvailableException();
         selectedProductType = productType;
-        status = Status.PRODUCT_SELECTED;
+        changeState(Status.PRODUCT_SELECTED);
     }
 
     public void insertCoin(Coin coin) throws ProductNotSelectedException {
@@ -54,10 +61,17 @@ public class Dispenser {
             return DispenseResult.error(amountToReturn, exception);
         }
 
+        changeState(Status.DISPENSE_PRODUCT);
+
         var dispensedProduct = productRepository.pickUnexpiredProduct(selectedProductType);
         // TODO: return amount as coins
         var amountToReturn = dispensedProduct.price().difference(amountIntroduced);
         cash = cash.plus(dispensedProduct.price());
+
+        if (!productRepository.hasStock(selectedProductType)) {
+
+        }
+
         initialState();
 
         return DispenseResult.ok(amountToReturn, dispensedProduct);
@@ -72,7 +86,7 @@ public class Dispenser {
     }
 
     private void checkProductAvailability() throws ProductWithoutStockException, ProductExpiratedException {
-        status = Status.CHECK_PRODUCT_AVAILABILITY;
+        changeState(Status.CHECK_PRODUCT_AVAILABILITY);
 
         if (!productRepository.hasStock(selectedProductType)) {
             throw new ProductWithoutStockException(selectedProductType);
@@ -83,7 +97,7 @@ public class Dispenser {
     }
 
     private void validateMoney() throws AmountIntroducedIsNotEnoughException, NotEnoughCashToGiveChangeException {
-        status = Status.VALIDATE_MONEY;
+        changeState(Status.VALIDATE_MONEY);
 
         if (!isAmountIntroducedEnough()) {
             throw new AmountIntroducedIsNotEnoughException(
@@ -106,7 +120,14 @@ public class Dispenser {
 
     private void initialState() {
         amountIntroduced = Money.ZERO;
-        status = Status.AVAILABLE;
+        selectedProductType = null;
+        changeState(Status.AVAILABLE);
+    }
+
+    private void changeState(Status newState) {
+        var previousState = status;
+        status = newState;
+        eventPublisher.publishEvent(new DispenserStatusChangeEvent(this, previousState, status));
     }
 
     public Status status() {
@@ -121,6 +142,7 @@ public class Dispenser {
         AVAILABLE,
         PRODUCT_SELECTED,
         CHECK_PRODUCT_AVAILABILITY,
-        VALIDATE_MONEY;
+        VALIDATE_MONEY,
+        DISPENSE_PRODUCT;
     }
 }
