@@ -7,6 +7,8 @@ public class Money {
 
     private BigDecimal amount;
 
+    public static final Money ZERO = new Money("0.00");
+
     public Money(BigDecimal amount) {
         this.amount = amount;
     }
@@ -17,6 +19,14 @@ public class Money {
 
     public Money plus(Money money) {
         return new Money(amount.add(money.amount));
+    }
+
+    public boolean isMoreThan(Money money) {
+        return amount.compareTo(money.amount) > 0;
+    }
+
+    public Money difference(Money money) {
+        return new Money(money.amount.subtract(amount));
     }
 
     @Override

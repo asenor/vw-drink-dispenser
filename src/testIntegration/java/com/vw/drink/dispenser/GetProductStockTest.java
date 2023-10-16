@@ -4,7 +4,7 @@ import com.vw.drink.dispenser.application.GetProductStock;
 import com.vw.drink.dispenser.domain.Product;
 import com.vw.drink.dispenser.domain.ProductType;
 import com.vw.drink.dispenser.domain.Timestamp;
-import com.vw.drink.dispenser.domain.exception.InvalidProduct;
+import com.vw.drink.dispenser.domain.exception.InvalidProductException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +16,7 @@ public class GetProductStockTest extends BaseIntegrationTest {
     private GetProductStock getStock;
 
     @Test
-    public void testAddProduct() throws InvalidProduct {
+    public void testAddProduct() throws InvalidProductException {
         productRepository.add(Product.Factory.create(ProductType.COKE, new Timestamp(0)));
         productRepository.add(Product.Factory.create(ProductType.WATER, new Timestamp(0)));
         productRepository.add(Product.Factory.create(ProductType.WATER, new Timestamp(0)));

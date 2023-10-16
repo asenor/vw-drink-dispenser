@@ -8,7 +8,7 @@ public class Timestamp {
         this.seconds = seconds;
     }
 
-    public long getSeconds() {
-        return seconds;
+    public boolean isBefore(Timestamp other) {
+        return seconds < other.seconds;
     }
 }
