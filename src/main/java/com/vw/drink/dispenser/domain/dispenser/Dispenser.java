@@ -12,6 +12,7 @@ import com.vw.drink.dispenser.domain.money.Money;
 import com.vw.drink.dispenser.domain.product.ProductPrice;
 import com.vw.drink.dispenser.domain.product.ProductRepository;
 import com.vw.drink.dispenser.domain.product.ProductType;
+import com.vw.drink.dispenser.domain.product.ProductWithoutStockEvent;
 import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -69,7 +70,7 @@ public class Dispenser {
         cash = cash.plus(dispensedProduct.price());
 
         if (!productRepository.hasStock(selectedProductType)) {
-
+            eventPublisher.publishEvent(new ProductWithoutStockEvent(this, selectedProductType));
         }
 
         initialState();
@@ -77,11 +78,15 @@ public class Dispenser {
         return DispenseResult.ok(amountToReturn, dispensedProduct);
     }
 
-    public DispenseResult reject() throws ProductNotSelectedException, NoUnexpiredProductException {
+    public DispenseResult reject() throws ProductNotSelectedException {
         if (status != Status.PRODUCT_SELECTED) throw new ProductNotSelectedException();
 
+        changeState(Status.CANCEL);
+
         var amountToReturn = amountIntroduced;
+
         initialState();
+
         return DispenseResult.ok(amountToReturn);
     }
 
@@ -143,6 +148,7 @@ public class Dispenser {
         PRODUCT_SELECTED,
         CHECK_PRODUCT_AVAILABILITY,
         VALIDATE_MONEY,
-        DISPENSE_PRODUCT;
+        DISPENSE_PRODUCT,
+        CANCEL;
     }
 }

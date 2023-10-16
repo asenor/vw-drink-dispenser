@@ -13,6 +13,7 @@ import com.vw.drink.dispenser.domain.money.Money;
 import com.vw.drink.dispenser.domain.product.Product;
 import com.vw.drink.dispenser.domain.product.ProductRepository;
 import com.vw.drink.dispenser.domain.product.ProductType;
+import com.vw.drink.dispenser.domain.product.ProductWithoutStockEvent;
 import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
 import com.vw.drink.dispenser.domain.time.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
@@ -169,22 +171,22 @@ public class DispenserTest {
     }
 
     @Test
-    public void dispense() throws DispenserNotAvailableException, ProductNotSelectedException, NoUnexpiredProductException {
-        var eventCaptor = ArgumentCaptor.forClass(DispenserStatusChangeEvent.class);
+    public void dispenseAndExhaustProductStock() throws DispenserNotAvailableException, ProductNotSelectedException, NoUnexpiredProductException {
+        var eventCaptor = ArgumentCaptor.forClass(ApplicationEvent.class);
 
         dispenser.selectProduct(ProductType.WATER);
         dispenser.insertCoin(Coin.CENTS_20);
         dispenser.insertCoin(Coin.CENTS_20);
         dispenser.insertCoin(Coin.CENTS_20);
 
-        when(productRepository.hasStock(ProductType.WATER)).thenReturn(true);
+        when(productRepository.hasStock(ProductType.WATER)).thenReturn(true, false);
         when(productRepository.hasAnyUnexpired(ProductType.WATER)).thenReturn(true);
 
         var dispensedProduct = Product.Factory.create(ProductType.WATER, new Timestamp(21));
         when(productRepository.pickUnexpiredProduct(ProductType.WATER))
             .thenReturn(dispensedProduct);
 
-
+        // Check result
         var result = dispenser.dispense();
 
         assertEquals(new Money("0.10"), result.amountReturned);
@@ -192,14 +194,19 @@ public class DispenserTest {
         assertFalse(result.error);
         assertNull(result.errorCause);
 
-        verify(eventPublisher, times(6)).publishEvent(eventCaptor.capture());
+        // Check published events
+        verify(eventPublisher, times(7)).publishEvent(eventCaptor.capture());
 
-        List<DispenserStatusChangeEvent> capturedEvents = eventCaptor.getAllValues();
-        assertEquals(Dispenser.Status.AVAILABLE, capturedEvents.get(0).currentStatus);
-        assertEquals(Dispenser.Status.PRODUCT_SELECTED, capturedEvents.get(1).currentStatus);
-        assertEquals(Dispenser.Status.CHECK_PRODUCT_AVAILABILITY, capturedEvents.get(2).currentStatus);
-        assertEquals(Dispenser.Status.VALIDATE_MONEY, capturedEvents.get(3).currentStatus);
-        assertEquals(Dispenser.Status.DISPENSE_PRODUCT, capturedEvents.get(4).currentStatus);
-        assertEquals(Dispenser.Status.AVAILABLE, capturedEvents.get(5).currentStatus);
+        List<ApplicationEvent> capturedEvents = eventCaptor.getAllValues();
+
+        assertEquals(Dispenser.Status.AVAILABLE, ((DispenserStatusChangeEvent) capturedEvents.get(0)).currentStatus);
+        assertEquals(Dispenser.Status.PRODUCT_SELECTED, ((DispenserStatusChangeEvent) capturedEvents.get(1)).currentStatus);
+        assertEquals(Dispenser.Status.CHECK_PRODUCT_AVAILABILITY, ((DispenserStatusChangeEvent) capturedEvents.get(2)).currentStatus);
+        assertEquals(Dispenser.Status.VALIDATE_MONEY, ((DispenserStatusChangeEvent) capturedEvents.get(3)).currentStatus);
+        assertEquals(Dispenser.Status.DISPENSE_PRODUCT, ((DispenserStatusChangeEvent) capturedEvents.get(4)).currentStatus);
+
+        assertEquals(ProductType.WATER, ((ProductWithoutStockEvent) capturedEvents.get(5)).type);
+
+        assertEquals(Dispenser.Status.AVAILABLE, ((DispenserStatusChangeEvent) capturedEvents.get(6)).currentStatus);
     }
 }
