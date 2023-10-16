@@ -9,6 +9,7 @@ import com.vw.drink.dispenser.domain.dispenser.exception.ProductNotSelectedExcep
 import com.vw.drink.dispenser.domain.dispenser.exception.ProductWithoutStockException;
 import com.vw.drink.dispenser.domain.money.Coin;
 import com.vw.drink.dispenser.domain.money.Money;
+import com.vw.drink.dispenser.domain.product.Product;
 import com.vw.drink.dispenser.domain.product.ProductPrice;
 import com.vw.drink.dispenser.domain.product.ProductRepository;
 import com.vw.drink.dispenser.domain.product.ProductType;
@@ -17,8 +18,16 @@ import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductExcepti
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 @Component
 public class Dispenser {
+
+    private static final int MAX_SECONDS_PER_STEP = 5;
 
     private final ProductRepository productRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -50,24 +59,26 @@ public class Dispenser {
         amountIntroduced = amountIntroduced.plus(coin.amount);
     }
 
-    public DispenseResult dispense() throws ProductNotSelectedException, NoUnexpiredProductException {
+    public DispenseResult dispense() throws ProductNotSelectedException {
         if (status != Status.PRODUCT_SELECTED) throw new ProductNotSelectedException();
 
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+        Dispensed dispensed;
         try {
-            checkProductAvailability();
-            validateMoney();
-        } catch (DispenseValidationException exception) {
-            var amountToReturn = amountIntroduced;
-            initialState();
-            return DispenseResult.error(amountToReturn, exception);
+            var future = executorService.schedule(() -> { try { checkProductAvailability(); } catch (DispenseValidationException e) { throw new RuntimeException(e); }}, 0, TimeUnit.SECONDS);
+            future.get(MAX_SECONDS_PER_STEP, TimeUnit.SECONDS);
+            future = executorService.schedule(() -> { try { validateMoney(); } catch (DispenseValidationException e) { throw new RuntimeException(e); }}, 0, TimeUnit.SECONDS);
+            future.get(MAX_SECONDS_PER_STEP, TimeUnit.SECONDS);
+            Future<Dispensed> dispensedFuture = executorService.schedule(this::dispenseProduct, 0, TimeUnit.SECONDS);
+            dispensed = dispensedFuture.get(MAX_SECONDS_PER_STEP, TimeUnit.SECONDS);
+        } catch (ExecutionException e) {
+            // 2 getCause calls because I needed to wrap DispenseValidationException into RuntimeException
+            return cancel(e.getCause().getCause());
+        } catch (Exception e) {
+            return cancel(e);
         }
 
         changeState(Status.DISPENSE_PRODUCT);
-
-        var dispensedProduct = productRepository.pickUnexpiredProduct(selectedProductType);
-        // TODO: return amount as coins
-        var amountToReturn = dispensedProduct.price().difference(amountIntroduced);
-        cash = cash.plus(dispensedProduct.price());
 
         if (!productRepository.hasStock(selectedProductType)) {
             eventPublisher.publishEvent(new ProductWithoutStockEvent(this, selectedProductType));
@@ -75,7 +86,7 @@ public class Dispenser {
 
         initialState();
 
-        return DispenseResult.ok(amountToReturn, dispensedProduct);
+        return DispenseResult.ok(dispensed.amountToReturn, dispensed.product);
     }
 
     public DispenseResult reject() throws ProductNotSelectedException {
@@ -90,7 +101,13 @@ public class Dispenser {
         return DispenseResult.ok(amountToReturn);
     }
 
-    private void checkProductAvailability() throws ProductWithoutStockException, ProductExpiratedException {
+    private DispenseResult cancel(Throwable e) {
+        var amountToReturn = amountIntroduced;
+        initialState();
+        return DispenseResult.error(amountToReturn, e);
+    }
+
+    private void checkProductAvailability() throws DispenseValidationException {
         changeState(Status.CHECK_PRODUCT_AVAILABILITY);
 
         if (!productRepository.hasStock(selectedProductType)) {
@@ -101,7 +118,7 @@ public class Dispenser {
         }
     }
 
-    private void validateMoney() throws AmountIntroducedIsNotEnoughException, NotEnoughCashToGiveChangeException {
+    private void validateMoney() throws DispenseValidationException {
         changeState(Status.VALIDATE_MONEY);
 
         if (!isAmountIntroducedEnough()) {
@@ -113,6 +130,17 @@ public class Dispenser {
         if (!isCashEnoughToGiveChange()) {
             throw new NotEnoughCashToGiveChangeException();
         }
+    }
+
+    private Dispensed dispenseProduct() throws NoUnexpiredProductException {
+        var dispensedProduct = productRepository.pickUnexpiredProduct(selectedProductType);
+        cash = cash.plus(dispensedProduct.price());
+
+        return new Dispensed(
+            // TODO: return amount as coins
+            dispensedProduct.price().difference(amountIntroduced),
+            dispensedProduct
+        );
     }
 
     private boolean isAmountIntroducedEnough() {
@@ -150,5 +178,15 @@ public class Dispenser {
         VALIDATE_MONEY,
         DISPENSE_PRODUCT,
         CANCEL;
+    }
+
+    private class Dispensed {
+        public Money amountToReturn;
+        public Product product;
+
+        public Dispensed(Money amountToReturn, Product product) {
+            this.amountToReturn = amountToReturn;
+            this.product = product;
+        }
     }
 }
