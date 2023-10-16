@@ -1,11 +1,11 @@
 package com.vw.drink.dispenser.infrastructure;
 
-import com.vw.drink.dispenser.domain.Product;
-import com.vw.drink.dispenser.domain.ProductRepository;
-import com.vw.drink.dispenser.domain.ProductType;
-import com.vw.drink.dispenser.domain.Time;
-import com.vw.drink.dispenser.domain.exception.InvalidProductException;
-import com.vw.drink.dispenser.domain.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.time.Time;
+import com.vw.drink.dispenser.domain.product.exception.InvalidProductException;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.product.Product;
+import com.vw.drink.dispenser.domain.product.ProductRepository;
+import com.vw.drink.dispenser.domain.product.ProductType;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

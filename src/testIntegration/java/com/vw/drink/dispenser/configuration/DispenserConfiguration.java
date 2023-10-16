@@ -1,8 +1,8 @@
 package com.vw.drink.dispenser.configuration;
 
-import com.vw.drink.dispenser.domain.Dispenser;
-import com.vw.drink.dispenser.domain.Money;
-import com.vw.drink.dispenser.domain.ProductRepository;
+import com.vw.drink.dispenser.domain.money.Money;
+import com.vw.drink.dispenser.domain.dispenser.Dispenser;
+import com.vw.drink.dispenser.domain.product.ProductRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

@@ -1,7 +1,7 @@
 package com.vw.drink.dispenser.configuration;
 
-import com.vw.drink.dispenser.domain.Time;
-import com.vw.drink.dispenser.domain.Timestamp;
+import com.vw.drink.dispenser.domain.time.Time;
+import com.vw.drink.dispenser.domain.time.Timestamp;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

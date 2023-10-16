@@ -1,4 +1,4 @@
-package com.vw.drink.dispenser.domain;
+package com.vw.drink.dispenser.domain.product;
 
 public enum ProductType {
     COKE,

@@ -1,8 +1,8 @@
-package com.vw.drink.dispenser.application;
+package com.vw.drink.dispenser.application.product;
 
-import com.vw.drink.dispenser.domain.Product;
-import com.vw.drink.dispenser.domain.ProductRepository;
-import com.vw.drink.dispenser.domain.exception.InvalidProductException;
+import com.vw.drink.dispenser.domain.product.exception.InvalidProductException;
+import com.vw.drink.dispenser.domain.product.Product;
+import com.vw.drink.dispenser.domain.product.ProductRepository;
 import org.springframework.stereotype.Service;
 
 @Service

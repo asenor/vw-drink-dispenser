@@ -1,6 +1,8 @@
-package com.vw.drink.dispenser.domain;
+package com.vw.drink.dispenser.domain.dispenser;
 
-import com.vw.drink.dispenser.domain.exception.DispenseValidationException;
+import com.vw.drink.dispenser.domain.money.Money;
+import com.vw.drink.dispenser.domain.dispenser.exception.DispenseValidationException;
+import com.vw.drink.dispenser.domain.product.Product;
 
 public class DispenseResult {
     public Money amountReturned;

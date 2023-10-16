@@ -1,7 +1,11 @@
 package com.vw.drink.dispenser.domain;
 
-import com.vw.drink.dispenser.domain.exception.InvalidProductException;
-import com.vw.drink.dispenser.domain.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.product.exception.InvalidProductException;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.product.Product;
+import com.vw.drink.dispenser.domain.product.ProductType;
+import com.vw.drink.dispenser.domain.time.Time;
+import com.vw.drink.dispenser.domain.time.Timestamp;
 import com.vw.drink.dispenser.infrastructure.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

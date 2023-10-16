@@ -1,7 +1,7 @@
 package com.vw.drink.dispenser.infrastructure;
 
-import com.vw.drink.dispenser.domain.Time;
-import com.vw.drink.dispenser.domain.Timestamp;
+import com.vw.drink.dispenser.domain.time.Time;
+import com.vw.drink.dispenser.domain.time.Timestamp;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;

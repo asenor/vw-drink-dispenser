@@ -1,9 +1,9 @@
-package com.vw.drink.dispenser.application;
+package com.vw.drink.dispenser.application.dispenser;
 
-import com.vw.drink.dispenser.domain.DispenseResult;
-import com.vw.drink.dispenser.domain.Dispenser;
-import com.vw.drink.dispenser.domain.exception.NoUnexpiredProductException;
-import com.vw.drink.dispenser.domain.exception.ProductNotSelectedException;
+import com.vw.drink.dispenser.domain.dispenser.DispenseResult;
+import com.vw.drink.dispenser.domain.dispenser.Dispenser;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.dispenser.exception.ProductNotSelectedException;
 import org.springframework.stereotype.Service;
 
 @Service

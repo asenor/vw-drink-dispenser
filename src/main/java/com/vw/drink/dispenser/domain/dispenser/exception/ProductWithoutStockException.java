@@ -1,6 +1,6 @@
-package com.vw.drink.dispenser.domain.exception;
+package com.vw.drink.dispenser.domain.dispenser.exception;
 
-import com.vw.drink.dispenser.domain.ProductType;
+import com.vw.drink.dispenser.domain.product.ProductType;
 
 public class ProductWithoutStockException extends DispenseValidationException {
 

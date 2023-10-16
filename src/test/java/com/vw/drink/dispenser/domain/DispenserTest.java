@@ -1,12 +1,19 @@
 package com.vw.drink.dispenser.domain;
 
-import com.vw.drink.dispenser.domain.exception.AmountIntroducedIsNotEnoughException;
-import com.vw.drink.dispenser.domain.exception.DispenserNotAvailableException;
-import com.vw.drink.dispenser.domain.exception.NoUnexpiredProductException;
-import com.vw.drink.dispenser.domain.exception.NotEnoughCashToGiveChangeException;
-import com.vw.drink.dispenser.domain.exception.ProductExpiratedException;
-import com.vw.drink.dispenser.domain.exception.ProductNotSelectedException;
-import com.vw.drink.dispenser.domain.exception.ProductWithoutStockException;
+import com.vw.drink.dispenser.domain.dispenser.Dispenser;
+import com.vw.drink.dispenser.domain.dispenser.exception.AmountIntroducedIsNotEnoughException;
+import com.vw.drink.dispenser.domain.dispenser.exception.DispenserNotAvailableException;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.dispenser.exception.NotEnoughCashToGiveChangeException;
+import com.vw.drink.dispenser.domain.dispenser.exception.ProductExpiratedException;
+import com.vw.drink.dispenser.domain.dispenser.exception.ProductNotSelectedException;
+import com.vw.drink.dispenser.domain.dispenser.exception.ProductWithoutStockException;
+import com.vw.drink.dispenser.domain.money.Coin;
+import com.vw.drink.dispenser.domain.money.Money;
+import com.vw.drink.dispenser.domain.product.Product;
+import com.vw.drink.dispenser.domain.product.ProductRepository;
+import com.vw.drink.dispenser.domain.product.ProductType;
+import com.vw.drink.dispenser.domain.time.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

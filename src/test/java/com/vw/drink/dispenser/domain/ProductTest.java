@@ -1,5 +1,8 @@
 package com.vw.drink.dispenser.domain;
 
+import com.vw.drink.dispenser.domain.product.Product;
+import com.vw.drink.dispenser.domain.product.ProductType;
+import com.vw.drink.dispenser.domain.time.Timestamp;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

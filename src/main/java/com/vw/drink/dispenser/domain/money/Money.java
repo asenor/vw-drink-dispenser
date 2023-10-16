@@ -1,4 +1,4 @@
-package com.vw.drink.dispenser.domain;
+package com.vw.drink.dispenser.domain.money;
 
 import java.math.BigDecimal;
 import java.util.Objects;

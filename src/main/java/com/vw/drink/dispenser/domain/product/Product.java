@@ -1,4 +1,7 @@
-package com.vw.drink.dispenser.domain;
+package com.vw.drink.dispenser.domain.product;
+
+import com.vw.drink.dispenser.domain.money.Money;
+import com.vw.drink.dispenser.domain.time.Timestamp;
 
 public class Product {
 

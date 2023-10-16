@@ -1,8 +1,8 @@
-package com.vw.drink.dispenser.application;
+package com.vw.drink.dispenser.application.dispenser;
 
-import com.vw.drink.dispenser.domain.Coin;
-import com.vw.drink.dispenser.domain.Dispenser;
-import com.vw.drink.dispenser.domain.exception.ProductNotSelectedException;
+import com.vw.drink.dispenser.domain.money.Coin;
+import com.vw.drink.dispenser.domain.dispenser.Dispenser;
+import com.vw.drink.dispenser.domain.dispenser.exception.ProductNotSelectedException;
 import org.springframework.stereotype.Service;
 
 @Service

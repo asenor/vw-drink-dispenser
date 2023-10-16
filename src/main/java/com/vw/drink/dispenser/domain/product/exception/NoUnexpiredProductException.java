@@ -1,6 +1,6 @@
-package com.vw.drink.dispenser.domain.exception;
+package com.vw.drink.dispenser.domain.product.exception;
 
-import com.vw.drink.dispenser.domain.ProductType;
+import com.vw.drink.dispenser.domain.product.ProductType;
 
 public class NoUnexpiredProductException extends Exception {
 

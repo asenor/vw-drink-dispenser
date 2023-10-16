@@ -1,7 +1,7 @@
-package com.vw.drink.dispenser.domain.exception;
+package com.vw.drink.dispenser.domain.dispenser.exception;
 
-import com.vw.drink.dispenser.domain.Money;
-import com.vw.drink.dispenser.domain.ProductType;
+import com.vw.drink.dispenser.domain.money.Money;
+import com.vw.drink.dispenser.domain.product.ProductType;
 
 public class AmountIntroducedIsNotEnoughException extends DispenseValidationException {
 

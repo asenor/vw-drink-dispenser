@@ -1,4 +1,4 @@
-package com.vw.drink.dispenser.domain.exception;
+package com.vw.drink.dispenser.domain.dispenser.exception;
 
 public class ProductNotSelectedException extends Exception {
 

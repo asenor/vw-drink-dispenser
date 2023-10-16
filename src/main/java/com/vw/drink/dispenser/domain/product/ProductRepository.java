@@ -1,7 +1,7 @@
-package com.vw.drink.dispenser.domain;
+package com.vw.drink.dispenser.domain.product;
 
-import com.vw.drink.dispenser.domain.exception.InvalidProductException;
-import com.vw.drink.dispenser.domain.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.product.exception.InvalidProductException;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
 
 public interface ProductRepository {
 

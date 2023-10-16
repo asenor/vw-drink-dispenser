@@ -1,7 +1,7 @@
 package com.vw.drink.dispenser;
 
-import com.vw.drink.dispenser.application.GetDispenserStatus;
-import com.vw.drink.dispenser.domain.Dispenser;
+import com.vw.drink.dispenser.application.dispenser.GetDispenserStatus;
+import com.vw.drink.dispenser.domain.dispenser.Dispenser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

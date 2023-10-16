@@ -1,4 +1,4 @@
-package com.vw.drink.dispenser.domain.exception;
+package com.vw.drink.dispenser.domain.product.exception;
 
 public class InvalidProductException extends Exception {
 

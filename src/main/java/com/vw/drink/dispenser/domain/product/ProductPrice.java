@@ -1,4 +1,6 @@
-package com.vw.drink.dispenser.domain;
+package com.vw.drink.dispenser.domain.product;
+
+import com.vw.drink.dispenser.domain.money.Money;
 
 import java.util.Map;
 

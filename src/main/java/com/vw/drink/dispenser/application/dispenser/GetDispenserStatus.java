@@ -1,6 +1,6 @@
-package com.vw.drink.dispenser.application;
+package com.vw.drink.dispenser.application.dispenser;
 
-import com.vw.drink.dispenser.domain.Dispenser;
+import com.vw.drink.dispenser.domain.dispenser.Dispenser;
 import org.springframework.stereotype.Service;
 
 @Service

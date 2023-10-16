@@ -1,4 +1,4 @@
-package com.vw.drink.dispenser.domain;
+package com.vw.drink.dispenser.domain.money;
 
 public enum Coin {
     CENTS_5(new Money("0.05")),

@@ -1,5 +1,6 @@
 package com.vw.drink.dispenser.domain;
 
+import com.vw.drink.dispenser.domain.money.Money;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

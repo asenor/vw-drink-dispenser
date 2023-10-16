@@ -1,17 +1,17 @@
 package com.vw.drink.dispenser;
 
-import com.vw.drink.dispenser.application.Dispense;
-import com.vw.drink.dispenser.application.InsertCoin;
-import com.vw.drink.dispenser.application.SelectProduct;
-import com.vw.drink.dispenser.domain.Coin;
-import com.vw.drink.dispenser.domain.Dispenser;
-import com.vw.drink.dispenser.domain.Product;
-import com.vw.drink.dispenser.domain.ProductType;
-import com.vw.drink.dispenser.domain.Timestamp;
-import com.vw.drink.dispenser.domain.exception.DispenserNotAvailableException;
-import com.vw.drink.dispenser.domain.exception.InvalidProductException;
-import com.vw.drink.dispenser.domain.exception.NoUnexpiredProductException;
-import com.vw.drink.dispenser.domain.exception.ProductNotSelectedException;
+import com.vw.drink.dispenser.application.dispenser.Dispense;
+import com.vw.drink.dispenser.application.dispenser.InsertCoin;
+import com.vw.drink.dispenser.application.dispenser.SelectProduct;
+import com.vw.drink.dispenser.domain.money.Coin;
+import com.vw.drink.dispenser.domain.time.Timestamp;
+import com.vw.drink.dispenser.domain.dispenser.Dispenser;
+import com.vw.drink.dispenser.domain.dispenser.exception.DispenserNotAvailableException;
+import com.vw.drink.dispenser.domain.product.exception.InvalidProductException;
+import com.vw.drink.dispenser.domain.product.exception.NoUnexpiredProductException;
+import com.vw.drink.dispenser.domain.dispenser.exception.ProductNotSelectedException;
+import com.vw.drink.dispenser.domain.product.Product;
+import com.vw.drink.dispenser.domain.product.ProductType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
